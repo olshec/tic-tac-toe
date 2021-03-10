@@ -3,9 +3,9 @@ body {
     background-color: rgb(211, 215, 207);
 }
 
-/* * {
+ * {
     box-sizing: border-box;
-} */
+} 
 
 .cell {
     width: 10em;

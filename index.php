@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+<br>
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+<br>
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+<br>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(211, 215, 207);
+}
+
+/* * {
+    box-sizing: border-box;
+} */
+
+.cell {
+    width: 10em;
+    height: 10em;
+    padding: 0;
+    margin-right: -0.4em;
+    margin-bottom: -0.4em;
+    display: inline-block;
+    border:1px solid black;
+    background: rgb(0, 154, 6);
+}

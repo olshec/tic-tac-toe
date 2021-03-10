@@ -39,6 +39,12 @@ body {
     top: 2em; left: 50em;
 }
 
+.button-start {
+	width: 18em;
+    top: 6em; left: 40em;
+    background: rgb(138, 226, 52);
+}
+
 .select-btn {
 	background: rgb(239, 41, 41);
 }

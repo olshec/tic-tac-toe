@@ -23,5 +23,8 @@
 <div class="button button-X select-btn">X</div>
 <div class="button button-O">O</div>
 
+<div class="button button-start">Start</div>
+
+
 </body>
 </html>

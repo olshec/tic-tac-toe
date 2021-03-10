@@ -20,5 +20,8 @@
 <div class="cell"></div>
 <br>
 
+<div class="button button-X select-btn">X</div>
+<div class="button button-O">O</div>
+
 </body>
 </html>

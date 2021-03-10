@@ -17,3 +17,28 @@ body {
     border:1px solid black;
     background: rgb(0, 154, 6);
 }
+
+
+.button {
+	position: absolute;
+	width: 8em;
+    height: 3em;
+    line-height: 3em;
+    padding: 0;
+    display: inline-block;
+    border:1px solid black;
+    background: rgb(252, 175, 62);
+    text-align: center;
+}
+
+.button-X {
+    top: 2em; left: 40em;
+}
+
+.button-O {
+    top: 2em; left: 50em;
+}
+
+.select-btn {
+	background: rgb(239, 41, 41);
+}

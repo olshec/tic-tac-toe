@@ -84,11 +84,15 @@ function afterPageLoad() {
     
     let cells = document.getElementsByClassName('cell');
     for(let i = 0; i < cells.length; i++) {
+        cells[i].setAttribute('checked', 'false');
         cells[i].addEventListener('click', function() {
-            let lb = activePlayer.getLabel();
-            let node = document.createTextNode(lb);
-            this.appendChild(node);
-        }.bind(cells[i]));
+            if(cells[i].getAttribute('checked') == 'false') {
+                let lb = activePlayer.getLabel();
+                let node = document.createTextNode(lb);
+                this.appendChild(node);
+                this.setAttribute('checked', 'true');
+            }
+        });
     }
 };
 

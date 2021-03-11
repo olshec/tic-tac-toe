@@ -249,11 +249,11 @@ class Bot extends Player
             if(cl[2] == this.emptySymbol) return 2;
             if(cl[8] == this.emptySymbol) return 8;
         } else if(cl[5] == userLabel) {
-            if(cl[2] == this.emptySymbol) return 0;
-            if(cl[8] == this.emptySymbol) return 6;
+            if(cl[0] == this.emptySymbol) return 0;
+            if(cl[6] == this.emptySymbol) return 6;
         } else if(cl[7] == userLabel) {
-            if(cl[2] == this.emptySymbol) return 0;
-            if(cl[8] == this.emptySymbol) return 2;
+            if(cl[0] == this.emptySymbol) return 0;
+            if(cl[2] == this.emptySymbol) return 2;
         }
         return -1;
     }
@@ -398,18 +398,19 @@ function afterPageLoad() {
                     let node = document.createTextNode(lb);
                     this.appendChild(node);
                     this.setAttribute('checked', 'true');
-                }
-                 game.checkGame();
-                 
-                 if(game.getGameStatus() != GameStatus.STOP) {
-                    let cells = document.getElementsByClassName('cell');
-                    let cl = game.getBot().cellsToList(cells);
-                    let indexCell = game.getBot().getCell(cl, game);
-                    let lb = game.getBot().getLabel();
-                    let node = document.createTextNode(lb);
-                    cells[indexCell].appendChild(node);
-                 }
-                 game.checkGame();
+                
+                    game.checkGame();
+                         
+                    if(game.getGameStatus() != GameStatus.STOP) {
+                        let cells = document.getElementsByClassName('cell');
+                        let cl = game.getBot().cellsToList(cells);
+                        let indexCell = game.getBot().getCell(cl, game);
+                        let lb = game.getBot().getLabel();
+                        let node = document.createTextNode(lb);
+                        cells[indexCell].appendChild(node);
+                    }
+                    game.checkGame();
+               }
             }
         });
     }

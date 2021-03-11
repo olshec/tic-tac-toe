@@ -10,12 +10,15 @@ body {
 .cell {
     width: 10em;
     height: 10em;
+    line-height: 10em;
     padding: 0;
     margin-right: -0.4em;
     margin-bottom: -0.4em;
     display: inline-block;
     border:1px solid black;
     background: rgb(0, 154, 6);
+    text-align: center;
+    overflow: hidden;
 }
 
 

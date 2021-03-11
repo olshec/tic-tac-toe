@@ -25,6 +25,6 @@
 
 <div class="button button-start">Start</div>
 
-
+<script src="scripts/js/main.js"></script>
 </body>
 </html>

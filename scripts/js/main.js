@@ -7,15 +7,21 @@ let game;
 
 class Game 
 {
+   
     countStep;
     gameStatus;
     user;
     bot;
-    activePlayer;
+    emptySymbol;
     
     constructor() {
         this.setCountStep(0);
         this.setGameStatus(GameStatus.NEW);
+        this.setEmptySymbol('z');
+    }
+    
+    setEmptySymbol(emptySymbol) {
+        this.emptySymbol = emptySymbol;
     }
     
     setCountStep(countStep) {
@@ -34,8 +40,8 @@ class Game
         this.bot = bot;
     }
     
-    setActivePlayer(activePlayer) {
-        this.activePlayer = activePlayer;
+    getEmptySymbol() {
+        return this.emptySymbol;
     }
     
     getCountStep() {
@@ -52,10 +58,6 @@ class Game
     
     getBot() {
         return this.bot;
-    }
-    
-    getActivePlayer() {
-        return this.activePlayer;
     }
     
     addCountStep() {
@@ -189,25 +191,33 @@ class Human extends Player
 
 class Bot extends Player
 {
-    emptySymbol = 'z';
+    game;
     
-    getEmptyCell(cl) {
+    setGame() {
+        this.game = game;
+    }
+    
+    getGame() {
+        return this.game;
+    }
+    
+    getEmptyCell(cl, game) {
         let indexCell = -1;
         for(let i = 0; i < cl.length; i++) {
-            if (cl[i] == this.emptySymbol) {
+            if (cl[i] == game.getEmptySymbol()) {
                return i;
             }
         }
         return indexCell;
     }
     
-    cellsToList(cells) {
+    cellsToList(cells, game) {
         let cl = [];
         for(let i = 0; i < cells.length; i++) {
             if (cells[i].childNodes.length == 1) {
                 cl.push(cells[i].childNodes[0].nodeValue);
             } else {
-                 cl.push(this.emptySymbol);
+                 cl.push(game.getEmptySymbol());
             }
         }
         return cl;
@@ -240,14 +250,14 @@ class Bot extends Player
         }
     }
     
-    getCornerIndexForSecondStep(cl) {
-        if (cl[0] == this.emptySymbol) {
+    getCornerIndexForSecondStep(cl, game) {
+        if (cl[0] == game.getEmptySymbol()) {
             return 0;
-        } else if (cl[2] == this.emptySymbol) {
+        } else if (cl[2] == game.getEmptySymbol()) {
             return 2;
-        } else if (cl[6] == this.emptySymbol) {
+        } else if (cl[6] == game.getEmptySymbol()) {
             return 6;
-        } else if (cl[8] == this.emptySymbol) {
+        } else if (cl[8] == game.getEmptySymbol()) {
             return 8;
         }
         let rand = this.getRandomInt(4);
@@ -265,27 +275,27 @@ class Bot extends Player
     ortogonalCorner(cl, game) {
         let userLabel = game.getUser().getLabel();
         if (cl[1] == userLabel) {
-            if (cl[6] == this.emptySymbol) return 6;
-            if (cl[8] == this.emptySymbol) return 8;
+            if (cl[6] == game.getEmptySymbol()) return 6;
+            if (cl[8] == game.getEmptySymbol()) return 8;
         } else if (cl[3] == userLabel) {
-            if (cl[2] == this.emptySymbol) return 2;
-            if (cl[8] == this.emptySymbol) return 8;
+            if (cl[2] == game.getEmptySymbol()) return 2;
+            if (cl[8] == game.getEmptySymbol()) return 8;
         } else if (cl[5] == userLabel) {
-            if (cl[0] == this.emptySymbol) return 0;
-            if (cl[6] == this.emptySymbol) return 6;
+            if (cl[0] == game.getEmptySymbol()) return 0;
+            if (cl[6] == game.getEmptySymbol()) return 6;
         } else if (cl[7] == userLabel) {
-            if (cl[0] == this.emptySymbol) return 0;
-            if (cl[2] == this.emptySymbol) return 2;
+            if (cl[0] == game.getEmptySymbol()) return 0;
+            if (cl[2] == game.getEmptySymbol()) return 2;
         }
         return -1;
     }
     
     getBestStep(cl, game) {
        for(let i = 0; i < cl.length; i++) {
-            if (cl[i] == this.emptySymbol){
+            if (cl[i] == game.getEmptySymbol()){
                 cl[i] = this.getLabel();
                 let result = game.checkList(cl, this.getLabel());
-                cl[i] = this.emptySymbol;
+                cl[i] = game.getEmptySymbol();
                 if (result == true) {
                     return i;
                 }
@@ -293,10 +303,10 @@ class Bot extends Player
         }
         let userLabel = game.getUser().getLabel();
         for(let i = 0; i < cl.length; i++) {
-            if (cl[i] == this.emptySymbol){
+            if (cl[i] == game.getEmptySymbol()){
                 cl[i] = userLabel;
                 let result = game.checkList(cl, userLabel);
-                cl[i] = this.emptySymbol;
+                cl[i] = game.getEmptySymbol();
                 if (result == true) {
                     return i;
                 }
@@ -311,7 +321,7 @@ class Bot extends Player
         let label = this.getLabel();
         if (label == TypeLabel.X) {
             if (countStep == 0) {
-                if (cl[4] == this.emptySymbol) {
+                if (cl[4] == game.getEmptySymbol()) {
                     return 4;
                 } 
             } else if (countStep == 2) {
@@ -328,11 +338,11 @@ class Bot extends Player
             }
         } else if (label == TypeLabel.O) {
             if (countStep == 1) {
-                if (cl[4] == this.emptySymbol) {
+                if (cl[4] == game.getEmptySymbol()) {
                     return 4;
                 } 
             } else if (countStep == 3) { 
-                return this.getCornerIndexForSecondStep(cl);
+                return this.getCornerIndexForSecondStep(cl, game);
             } else {
                 let bestStep = this.getBestStep(cl, game);
                 if (bestStep != -1) {
@@ -340,7 +350,7 @@ class Bot extends Player
                 }
             }
         }
-        let indexCell = this.getEmptyCell(cl);
+        let indexCell = this.getEmptyCell(cl, game);
         return indexCell;
     }
 }
@@ -413,7 +423,7 @@ function afterPageLoad() {
            if (game.getUser().getLabel() == TypeLabel.O) {           
                 if (game.getGameStatus() != GameStatus.STOP) {
                     let cells = document.getElementsByClassName('cell');
-                    let cl = game.getBot().cellsToList(cells);
+                    let cl = game.getBot().cellsToList(cells, game);
                     let indexCell = game.getBot().getCell(cl, game);
                     let lb = game.getBot().getLabel();
                     let node = document.createTextNode(lb);
@@ -444,7 +454,7 @@ function afterPageLoad() {
                          
                     if (game.getGameStatus() != GameStatus.STOP) {
                         let cells = document.getElementsByClassName('cell');
-                        let cl = game.getBot().cellsToList(cells);
+                        let cl = game.getBot().cellsToList(cells, game);
                         let indexCell = game.getBot().getCell(cl, game);
                         let lb = game.getBot().getLabel();
                         let node = document.createTextNode(lb);

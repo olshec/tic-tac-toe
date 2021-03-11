@@ -3,11 +3,13 @@ let user;
 let bot;
 let gameStatus;
 let activePlayer;
+let countStep;
 
 class GameStatus 
 {
     static NEW = '1';
     static CONTINUE = '2';
+    static STOP = '3';
 }
 
 class TypeLabel 
@@ -52,6 +54,67 @@ class Bot extends Player
     
 }
 
+function printUserWin() {
+    let messageResult = document.getElementsByClassName('message')[0];
+    messageResult.hidden = false;
+}
+
+function printBotWin() {
+    let messageResult = document.getElementsByClassName('message')[0];
+    messageResult.childNodes[0].nodeValue = 'You lose!';
+    messageResult.hidden = false;
+}
+
+function printDraw() {
+    let messageResult = document.getElementsByClassName('message')[0];
+    messageResult.childNodes[0].nodeValue = 'The draw!';
+    messageResult.hidden = false;
+}
+
+function checkCells(cells, label) {
+    let cl = [];
+    for(let i = 0; i < cells.length; i++) {
+        cl.push(cells[i].childNodes[0].nodeValue);
+    }
+    
+    if(cl[0] == label && cl[1] == label && cl[2] == label ||
+       cl[3] == label && cl[4] == label && cl[5] == label ||
+       cl[6] == label && cl[7] == label && cl[8] == label ||
+       cl[0] == label && cl[3] == label && cl[6] == label ||
+       cl[1] == label && cl[4] == label && cl[7] == label ||
+       cl[2] == label && cl[5] == label && cl[8] == label ||
+       cl[0] == label && cl[4] == label && cl[8] == label ||
+       cl[2] == label && cl[4] == label && cl[6] == label   ){
+        return true;
+    }
+    return false;
+}
+    
+function stopGame() {
+    gameStatus = GameStatus.STOP;
+    
+    let cells = document.getElementsByClassName('cell');
+    let win = this.checkCells(cells, 'X');
+    if(win == true) {
+        if(user.getLabel() == 'X') {
+            printUserWin();
+        } else {
+            printBotWin();
+        }
+    } else {
+        let win = this.checkCells(cells, 'O');
+        if(win == true) {
+            if(user.getLabel() == 'O') {
+                printUserWin();
+            } else {
+                printBotWin();
+            }
+        } else {
+            printDraw();
+        }
+    }
+}
+
 
 function afterPageLoad() {
     
@@ -93,6 +156,7 @@ function afterPageLoad() {
            document.getElementsByClassName('button-O')[0].style.background = 
             'rgb(110, 110, 110)';
            gameStatus = GameStatus.CONTINUE;
+           countStep = 0;
            activePlayer = user;
         }
 
@@ -113,6 +177,10 @@ function afterPageLoad() {
                     } else {
                         activePlayer = user;
                     }
+                }
+                countStep++;
+                if(countStep == 9) {
+                    stopGame();
                 }
             }
         });

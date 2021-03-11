@@ -68,29 +68,38 @@ function afterPageLoad() {
     
     let buttonStart = document.getElementsByClassName('button-start')[0];
     buttonStart.addEventListener('click', function(){
-         let buttonX = document.getElementsByClassName('button-X')[0];
-         if(buttonX.classList.contains('select-btn') == true) {
-            user = new User(TypeLabel.X);
-            bot = new User(TypeLabel.O);
-        } else {
-            user = new User(TypeLabel.O);
-            bot = new User(TypeLabel.X);
+        if(gameStatus == GameStatus.NEW) {
+            let buttonX = document.getElementsByClassName('button-X')[0];
+            if(buttonX.classList.contains('select-btn') == true) {
+                user = new User(TypeLabel.X);
+                bot = new User(TypeLabel.O);
+            } else {
+                user = new User(TypeLabel.O);
+                bot = new User(TypeLabel.X);
+            }
+            
+           this.style.background = 'rgb(110, 110, 110)';
+           document.getElementsByClassName('button-X')[0].style.background = 
+            'rgb(110, 110, 110)';
+           document.getElementsByClassName('button-O')[0].style.background = 
+            'rgb(110, 110, 110)';
+           gameStatus = GameStatus.CONTINUE;
+           activePlayer = user;
         }
-        
-       this.style.background = 'rgb(110, 110, 110)';
-       gameStatus = GameStatus.CONTINUE;
-       activePlayer = user;
+
     });
     
     let cells = document.getElementsByClassName('cell');
     for(let i = 0; i < cells.length; i++) {
         cells[i].setAttribute('checked', 'false');
         cells[i].addEventListener('click', function() {
-            if(cells[i].getAttribute('checked') == 'false') {
-                let lb = activePlayer.getLabel();
-                let node = document.createTextNode(lb);
-                this.appendChild(node);
-                this.setAttribute('checked', 'true');
+            if(gameStatus == GameStatus.CONTINUE) {
+                if(cells[i].getAttribute('checked') == 'false') {
+                    let lb = activePlayer.getLabel();
+                    let node = document.createTextNode(lb);
+                    this.appendChild(node);
+                    this.setAttribute('checked', 'true');
+                }
             }
         });
     }

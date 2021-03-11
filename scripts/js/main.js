@@ -213,32 +213,93 @@ class Bot extends Player
         return cl;
     }
     
+    getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    getCornerIndex(cl, game) {
+        let userLabel = game.getUser().getLabel();
+        if(cl[0] == userLabel) {
+            return 2;
+        } else if(cl[2] == userLabel) {
+            return 8;
+        } else if(cl[6] == userLabel) {
+            return 0;
+        } else if(cl[8] == userLabel) {
+            return 6;
+        }
+        let rand = this.getRandomInt(4);
+        if(rand == 0) {
+            return 0;
+        } else if(rand == 1) {
+            return 2;
+        } else if(rand == 2) {
+            return 6;
+        } else if(rand == 3) {
+            return 8;
+        }
+    }
+    
+    ortogonalCorner(cl, game) {
+        let userLabel = game.getUser().getLabel();
+        if(cl[1] == userLabel) {
+            if(cl[6] == this.emptySymbol) return 6;
+            if(cl[8] == this.emptySymbol) return 8;
+        } else if(cl[3] == userLabel) {
+            if(cl[2] == this.emptySymbol) return 2;
+            if(cl[8] == this.emptySymbol) return 8;
+        } else if(cl[5] == userLabel) {
+            if(cl[2] == this.emptySymbol) return 0;
+            if(cl[8] == this.emptySymbol) return 6;
+        } else if(cl[7] == userLabel) {
+            if(cl[2] == this.emptySymbol) return 0;
+            if(cl[8] == this.emptySymbol) return 2;
+        }
+        return -1;
+    }
+    
     getCell(cl, game) {
-        //let cl = this.cellsToList(cells);
-        let indexCell = this.getEmptyCell(cl);
-        //let countEmptyCell = 0;
         
-        if(indexCell == -1) {
-            return -1;
-        }
-        
-        cl[indexCell] = this.getLabel();
-        let result = game.checkList(cl, this.getLabel());
-        if(result == true) {
-            return indexCell;
-        } else {
-            let indexCellForUser = this.getEmptyCell(cl);
-            if(indexCellForUser != -1) {
-                cl[indexCellForUser] = game.getUser().getLabel();
-                let indexCellReturn = this.getCell(cl, game);
-                if(indexCellReturn == -1) {
-                    return indexCell;
-                }
+        let countStep = game.getCountStep();
+        let label = this.getLabel();
+        if(label == TypeLabel.X) {
+            if(countStep == 0) {
+                if(cl[4] == this.emptySymbol) {
+                    return 4;
+                } 
+            } else if(countStep == 2){
+                return this.getCornerIndex(cl, game);
             } else {
-                return indexCell;
+               for(let i = 0; i < cl.length; i++) {
+                    if (cl[i] == this.emptySymbol){
+                        cl[i] = this.getLabel();
+                        let result = game.checkList(cl, this.getLabel());
+                        cl[i] = this.emptySymbol;
+                        if(result == true) {
+                            return i;
+                        }
+                    }
+                }
+                let userLabel = game.getUser().getLabel();
+                for(let i = 0; i < cl.length; i++) {
+                    if (cl[i] == this.emptySymbol){
+                        cl[i] = userLabel;
+                        let result = game.checkList(cl, userLabel);
+                        cl[i] = this.emptySymbol;
+                        if(result == true) {
+                            return i;
+                        }
+                    }
+                }
+                let ortogonalCorner = this.ortogonalCorner(cl, game);
+                if (ortogonalCorner != -1) {
+                    return ortogonalCorner;
+                }
             }
-            
-        }
+        } 
+
+
+        let indexCell = this.getEmptyCell(cl);
         return indexCell;
     }
 }

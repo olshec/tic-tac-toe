@@ -71,7 +71,11 @@ class Game
                  cl.push('z');
             }
         }
+        return this.checkList(cl, label);
         
+    }
+    
+    checkList(cl, label) {
         if(cl[0] == label && cl[1] == label && cl[2] == label ||
            cl[3] == label && cl[4] == label && cl[5] == label ||
            cl[6] == label && cl[7] == label && cl[8] == label ||
@@ -182,7 +186,57 @@ class Human extends Player
 
 class Bot extends Player
 {
+    emptySymbol = 'z';
     
+    getEmptyCell(cl) {
+        let indexCell = 0;
+        for(let i = 0; i < cl.length; i++) {
+            if(cl[i] == this.emptySymbol) {
+                countEmptyCell++;
+                indexCell = i;
+            }
+        }
+        return indexCell;
+    }
+    
+    cellsToList(cells) {
+        let cl = [];
+        for(let i = 0; i < cells.length; i++) {
+            if(cells[i].childNodes.length == 1) {
+                cl.push(cells[i].childNodes[0].nodeValue);
+            } else {
+                 cl.push(this.emptySymbol);
+            }
+        }
+        return cl;
+    }
+    
+    getCell(cells, game) {
+        let cl = this.cellsToList(cells);
+        let indexCell = this.getEmptyCell(cl);
+        let countEmptyCell = 0;
+        
+        if(countEmptyCell == 1) {
+            return indexCell;
+        }
+        
+        for(let i = 0; i < cl.length; i++) {
+            if(cl[i] == emptySymbol) {
+                cl[i] = this.getLabel();
+                let result = game.checkList(cl, this.getLabel());
+                if(result == true) {
+                    indexCell = i;
+                    break;
+                } else {
+                    
+  
+                    indexCell = this.getCell(cl, game);
+                    break;
+                } 
+            }
+        }
+        return indexCell;
+    }
 }
 
 

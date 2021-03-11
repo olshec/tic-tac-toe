@@ -1,8 +1,8 @@
 
-let user;
-let bot;
-let gameStatus;
-let activePlayer;
+var user;
+var bot;
+var gameStatus;
+var activePlayer;
 
 class GameStatus 
 {
@@ -16,7 +16,7 @@ class TypeLabel
   static O = 'O';
 }
 
-class User 
+class Player 
 {
     label;
     score;
@@ -42,6 +42,15 @@ class User
     }
 }
 
+class Human extends Player
+{
+    
+}
+
+class Bot extends Player
+{
+    
+}
 
 
 function afterPageLoad() {
@@ -71,11 +80,11 @@ function afterPageLoad() {
         if(gameStatus == GameStatus.NEW) {
             let buttonX = document.getElementsByClassName('button-X')[0];
             if(buttonX.classList.contains('select-btn') == true) {
-                user = new User(TypeLabel.X);
-                bot = new User(TypeLabel.O);
+                user = new Human(TypeLabel.X);
+                bot = new Bot(TypeLabel.O);
             } else {
-                user = new User(TypeLabel.O);
-                bot = new User(TypeLabel.X);
+                user = new Human(TypeLabel.O);
+                bot = new Bot(TypeLabel.X);
             }
             
            this.style.background = 'rgb(110, 110, 110)';
@@ -99,6 +108,11 @@ function afterPageLoad() {
                     let node = document.createTextNode(lb);
                     this.appendChild(node);
                     this.setAttribute('checked', 'true');
+                    if((activePlayer instanceof Human)) {
+                        activePlayer = bot;
+                    } else {
+                        activePlayer = user;
+                    }
                 }
             }
         });

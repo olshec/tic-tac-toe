@@ -25,6 +25,8 @@
 
 <div class="button button-start">Start</div>
 
+<div class="message" hidden="true">You win!</div>
+
 <script src="scripts/js/main.js"></script>
 </body>
 </html>

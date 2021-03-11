@@ -258,6 +258,31 @@ class Bot extends Player
         return -1;
     }
     
+    getBestStep(cl, game) {
+       for(let i = 0; i < cl.length; i++) {
+            if (cl[i] == this.emptySymbol){
+                cl[i] = this.getLabel();
+                let result = game.checkList(cl, this.getLabel());
+                cl[i] = this.emptySymbol;
+                if(result == true) {
+                    return i;
+                }
+            }
+        }
+        let userLabel = game.getUser().getLabel();
+        for(let i = 0; i < cl.length; i++) {
+            if (cl[i] == this.emptySymbol){
+                cl[i] = userLabel;
+                let result = game.checkList(cl, userLabel);
+                cl[i] = this.emptySymbol;
+                if(result == true) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+    
     getCell(cl, game) {
         
         let countStep = game.getCountStep();
@@ -270,33 +295,18 @@ class Bot extends Player
             } else if(countStep == 2){
                 return this.getCornerIndex(cl, game);
             } else {
-               for(let i = 0; i < cl.length; i++) {
-                    if (cl[i] == this.emptySymbol){
-                        cl[i] = this.getLabel();
-                        let result = game.checkList(cl, this.getLabel());
-                        cl[i] = this.emptySymbol;
-                        if(result == true) {
-                            return i;
-                        }
-                    }
-                }
-                let userLabel = game.getUser().getLabel();
-                for(let i = 0; i < cl.length; i++) {
-                    if (cl[i] == this.emptySymbol){
-                        cl[i] = userLabel;
-                        let result = game.checkList(cl, userLabel);
-                        cl[i] = this.emptySymbol;
-                        if(result == true) {
-                            return i;
-                        }
-                    }
+                let bestStep = this.getBestStep(cl, game);
+                if(bestStep != -1) {
+                    return bestStep;
                 }
                 let ortogonalCorner = this.ortogonalCorner(cl, game);
                 if (ortogonalCorner != -1) {
                     return ortogonalCorner;
                 }
             }
-        } 
+        } else if(label == TypeLabel.O) {
+            
+        }
 
 
         let indexCell = this.getEmptyCell(cl);

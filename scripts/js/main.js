@@ -1,9 +1,32 @@
 
+let countStep;
+//let game;
 let user;
 let bot;
 let gameStatus;
 let activePlayer;
-let countStep;
+
+
+class Game 
+{
+    countStep;
+    
+    constructor() {
+        this.setCountStep(0);
+    }
+    
+    setCountStep(countStep) {
+        this.countStep = countStep;
+    }
+    
+    getCountStep() {
+        return this.countStep;
+    }
+    
+    addCountStep() {
+        this.countStep++;
+    }
+}
 
 class GameStatus 
 {
@@ -74,7 +97,11 @@ function printDraw() {
 function checkCells(cells, label) {
     let cl = [];
     for(let i = 0; i < cells.length; i++) {
-        cl.push(cells[i].childNodes[0].nodeValue);
+        if(cells[i].childNodes.length == 1) {
+            cl.push(cells[i].childNodes[0].nodeValue);
+        } else {
+             cl.push('z');
+        }
     }
     
     if(cl[0] == label && cl[1] == label && cl[2] == label ||
@@ -90,12 +117,17 @@ function checkCells(cells, label) {
     return false;
 }
     
-function stopGame() {
-    gameStatus = GameStatus.STOP;
+function checkGame() {
+    countStep++;
+    
+    if(countStep == 9) {
+        gameStatus = GameStatus.STOP;
+    }
     
     let cells = document.getElementsByClassName('cell');
     let win = this.checkCells(cells, 'X');
     if(win == true) {
+        gameStatus = GameStatus.STOP;
         if(user.getLabel() == 'X') {
             printUserWin();
         } else {
@@ -104,12 +136,13 @@ function stopGame() {
     } else {
         let win = this.checkCells(cells, 'O');
         if(win == true) {
+            gameStatus = GameStatus.STOP;
             if(user.getLabel() == 'O') {
                 printUserWin();
             } else {
                 printBotWin();
             }
-        } else {
+        } else if (GameStatus.STOP ==  gameStatus) {
             printDraw();
         }
     }
@@ -166,7 +199,7 @@ function afterPageLoad() {
     for(let i = 0; i < cells.length; i++) {
         cells[i].setAttribute('checked', 'false');
         cells[i].addEventListener('click', function() {
-            if(gameStatus == GameStatus.CONTINUE) {
+            if(GameStatus.CONTINUE == gameStatus) {
                 if(cells[i].getAttribute('checked') == 'false') {
                     let lb = activePlayer.getLabel();
                     let node = document.createTextNode(lb);
@@ -178,10 +211,7 @@ function afterPageLoad() {
                         activePlayer = user;
                     }
                 }
-                countStep++;
-                if(countStep == 9) {
-                    stopGame();
-                }
+                checkGame();
             }
         });
     }

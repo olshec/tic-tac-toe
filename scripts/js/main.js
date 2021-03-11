@@ -342,6 +342,10 @@ class Bot extends Player
                     return 4;
                 } 
             } else if (countStep == 3) { 
+                let bestStep = this.getBestStep(cl, game);
+                if (bestStep != -1) {
+                    return bestStep;
+                }
                 return this.getCornerIndexForSecondStep(cl, game);
             } else {
                 let bestStep = this.getBestStep(cl, game);

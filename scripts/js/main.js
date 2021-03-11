@@ -65,7 +65,7 @@ class Game
     checkCells(cells, label) {
         let cl = [];
         for(let i = 0; i < cells.length; i++) {
-            if(cells[i].childNodes.length == 1) {
+            if (cells[i].childNodes.length == 1) {
                 cl.push(cells[i].childNodes[0].nodeValue);
             } else {
                  cl.push('z');
@@ -76,14 +76,14 @@ class Game
     }
     
     checkList(cl, label) {
-        if(cl[0] == label && cl[1] == label && cl[2] == label ||
+        if (cl[0] == label && cl[1] == label && cl[2] == label ||
            cl[3] == label && cl[4] == label && cl[5] == label ||
            cl[6] == label && cl[7] == label && cl[8] == label ||
            cl[0] == label && cl[3] == label && cl[6] == label ||
            cl[1] == label && cl[4] == label && cl[7] == label ||
            cl[2] == label && cl[5] == label && cl[8] == label ||
            cl[0] == label && cl[4] == label && cl[8] == label ||
-           cl[2] == label && cl[4] == label && cl[6] == label   ){
+           cl[2] == label && cl[4] == label && cl[6] == label   ) {
             return true;
         }
         return false;
@@ -92,24 +92,24 @@ class Game
     checkGame() {
         this.addCountStep();
         
-        if(this.getCountStep() == 9) {
+        if (this.getCountStep() == 9) {
             this.setGameStatus(GameStatus.STOP);
         }
         
         let cells = document.getElementsByClassName('cell');
         let win = this.checkCells(cells, TypeLabel.X);
-        if(win == true) {
+        if (win == true) {
             this.setGameStatus(GameStatus.STOP);
-            if(this.getUser().getLabel() == TypeLabel.X) {
+            if (this.getUser().getLabel() == TypeLabel.X) {
                 this.printUserWin();
             } else {
                 this.printBotWin();
             }
         } else {
             let win = this.checkCells(cells, TypeLabel.O);
-            if(win == true) {
+            if (win == true) {
                 this.setGameStatus(GameStatus.STOP);
-                if(this.getUser().getLabel() == TypeLabel.O) {
+                if (this.getUser().getLabel() == TypeLabel.O) {
                     this.printUserWin();
                 } else {
                     this.printBotWin();
@@ -194,7 +194,7 @@ class Bot extends Player
     getEmptyCell(cl) {
         let indexCell = -1;
         for(let i = 0; i < cl.length; i++) {
-            if(cl[i] == this.emptySymbol) {
+            if (cl[i] == this.emptySymbol) {
                 indexCell = i;
             }
         }
@@ -204,7 +204,7 @@ class Bot extends Player
     cellsToList(cells) {
         let cl = [];
         for(let i = 0; i < cells.length; i++) {
-            if(cells[i].childNodes.length == 1) {
+            if (cells[i].childNodes.length == 1) {
                 cl.push(cells[i].childNodes[0].nodeValue);
             } else {
                  cl.push(this.emptySymbol);
@@ -219,41 +219,41 @@ class Bot extends Player
 
     getCornerIndex(cl, game) {
         let userLabel = game.getUser().getLabel();
-        if(cl[0] == userLabel) {
+        if (cl[0] == userLabel) {
             return 2;
-        } else if(cl[2] == userLabel) {
+        } else if (cl[2] == userLabel) {
             return 8;
-        } else if(cl[6] == userLabel) {
+        } else if (cl[6] == userLabel) {
             return 0;
-        } else if(cl[8] == userLabel) {
+        } else if (cl[8] == userLabel) {
             return 6;
         }
         let rand = this.getRandomInt(4);
-        if(rand == 0) {
+        if (rand == 0) {
             return 0;
-        } else if(rand == 1) {
+        } else if (rand == 1) {
             return 2;
-        } else if(rand == 2) {
+        } else if (rand == 2) {
             return 6;
-        } else if(rand == 3) {
+        } else if (rand == 3) {
             return 8;
         }
     }
     
     ortogonalCorner(cl, game) {
         let userLabel = game.getUser().getLabel();
-        if(cl[1] == userLabel) {
-            if(cl[6] == this.emptySymbol) return 6;
-            if(cl[8] == this.emptySymbol) return 8;
-        } else if(cl[3] == userLabel) {
-            if(cl[2] == this.emptySymbol) return 2;
-            if(cl[8] == this.emptySymbol) return 8;
-        } else if(cl[5] == userLabel) {
-            if(cl[0] == this.emptySymbol) return 0;
-            if(cl[6] == this.emptySymbol) return 6;
-        } else if(cl[7] == userLabel) {
-            if(cl[0] == this.emptySymbol) return 0;
-            if(cl[2] == this.emptySymbol) return 2;
+        if (cl[1] == userLabel) {
+            if (cl[6] == this.emptySymbol) return 6;
+            if (cl[8] == this.emptySymbol) return 8;
+        } else if (cl[3] == userLabel) {
+            if (cl[2] == this.emptySymbol) return 2;
+            if (cl[8] == this.emptySymbol) return 8;
+        } else if (cl[5] == userLabel) {
+            if (cl[0] == this.emptySymbol) return 0;
+            if (cl[6] == this.emptySymbol) return 6;
+        } else if (cl[7] == userLabel) {
+            if (cl[0] == this.emptySymbol) return 0;
+            if (cl[2] == this.emptySymbol) return 2;
         }
         return -1;
     }
@@ -264,7 +264,7 @@ class Bot extends Player
                 cl[i] = this.getLabel();
                 let result = game.checkList(cl, this.getLabel());
                 cl[i] = this.emptySymbol;
-                if(result == true) {
+                if (result == true) {
                     return i;
                 }
             }
@@ -275,7 +275,7 @@ class Bot extends Player
                 cl[i] = userLabel;
                 let result = game.checkList(cl, userLabel);
                 cl[i] = this.emptySymbol;
-                if(result == true) {
+                if (result == true) {
                     return i;
                 }
             }
@@ -287,16 +287,16 @@ class Bot extends Player
         
         let countStep = game.getCountStep();
         let label = this.getLabel();
-        if(label == TypeLabel.X) {
-            if(countStep == 0) {
-                if(cl[4] == this.emptySymbol) {
+        if (label == TypeLabel.X) {
+            if (countStep == 0) {
+                if (cl[4] == this.emptySymbol) {
                     return 4;
                 } 
-            } else if(countStep == 2){
+            } else if (countStep == 2) {
                 return this.getCornerIndex(cl, game);
             } else {
                 let bestStep = this.getBestStep(cl, game);
-                if(bestStep != -1) {
+                if (bestStep != -1) {
                     return bestStep;
                 }
                 let ortogonalCorner = this.ortogonalCorner(cl, game);
@@ -304,8 +304,14 @@ class Bot extends Player
                     return ortogonalCorner;
                 }
             }
-        } else if(label == TypeLabel.O) {
-            
+        } else if (label == TypeLabel.O) {
+            if (countStep == 1) {
+                if (cl[4] == this.emptySymbol) {
+                    return 4;
+                } 
+            } else if (countStep == 2) { 
+                
+            }
         }
 
 
@@ -324,7 +330,7 @@ function startNewGame() {
     let cells = document.getElementsByClassName('cell');
     for(let i = 0; i < cells.length; i++) {
         cells[i].setAttribute('checked', 'false');
-        if(cells[i].childNodes.length == 1) {
+        if (cells[i].childNodes.length == 1) {
             cells[i].childNodes[0].remove();
         }
     }
@@ -342,7 +348,7 @@ function afterPageLoad() {
     
     let buttonX = document.getElementsByClassName('button-X')[0];
     buttonX.addEventListener('click', function() {
-        if(this.classList.contains('select-btn') == false) {
+        if (this.classList.contains('select-btn') == false) {
             this.classList.add('select-btn');
             let buttonO = document.getElementsByClassName('button-O')[0];
             buttonO.classList.remove('select-btn');
@@ -351,7 +357,7 @@ function afterPageLoad() {
     
     let buttonO = document.getElementsByClassName('button-O')[0];
     buttonO.addEventListener('click', function() {
-        if(this.classList.contains('select-btn') == false) {
+        if (this.classList.contains('select-btn') == false) {
             this.classList.add('select-btn');
             let buttonX = document.getElementsByClassName('button-X')[0];
             buttonX.classList.remove('select-btn');
@@ -360,12 +366,12 @@ function afterPageLoad() {
     
     let buttonStart = document.getElementsByClassName('button-start')[0];
     buttonStart.addEventListener('click', function(){
-        if(game.getGameStatus() == GameStatus.NEW) {
+        if (game.getGameStatus() == GameStatus.NEW) {
             
             this.childNodes[0].nodeValue = 'Start new game';
             
             let buttonX = document.getElementsByClassName('button-X')[0];
-            if(buttonX.classList.contains('select-btn') == true) {
+            if (buttonX.classList.contains('select-btn') == true) {
                 game.setUser(new Human(TypeLabel.X));
                 game.setBot(new Bot(TypeLabel.O));
             } else {
@@ -379,8 +385,8 @@ function afterPageLoad() {
            game.setGameStatus(GameStatus.CONTINUE);
            game.setCountStep(0);
            
-           if(game.getUser().getLabel() == TypeLabel.O) {           
-                if(game.getGameStatus() != GameStatus.STOP) {
+           if (game.getUser().getLabel() == TypeLabel.O) {           
+                if (game.getGameStatus() != GameStatus.STOP) {
                     let cells = document.getElementsByClassName('cell');
                     let cl = game.getBot().cellsToList(cells);
                     let indexCell = game.getBot().getCell(cl, game);
@@ -402,8 +408,8 @@ function afterPageLoad() {
     for(let i = 0; i < cells.length; i++) {
         cells[i].setAttribute('checked', 'false');
         cells[i].addEventListener('click', function() {
-            if(game.getGameStatus() == GameStatus.CONTINUE) {
-                if(cells[i].getAttribute('checked') == 'false') {
+            if (game.getGameStatus() == GameStatus.CONTINUE) {
+                if (cells[i].getAttribute('checked') == 'false') {
                     let lb = game.getUser().getLabel();
                     let node = document.createTextNode(lb);
                     this.appendChild(node);
@@ -411,7 +417,7 @@ function afterPageLoad() {
                 
                     game.checkGame();
                          
-                    if(game.getGameStatus() != GameStatus.STOP) {
+                    if (game.getGameStatus() != GameStatus.STOP) {
                         let cells = document.getElementsByClassName('cell');
                         let cl = game.getBot().cellsToList(cells);
                         let indexCell = game.getBot().getCell(cl, game);

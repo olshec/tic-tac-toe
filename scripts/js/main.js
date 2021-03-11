@@ -240,6 +240,28 @@ class Bot extends Player
         }
     }
     
+    getCornerIndexForSecondStep(cl) {
+        if (cl[0] == this.emptySymbol) {
+            return 0;
+        } else if (cl[2] == this.emptySymbol) {
+            return 2;
+        } else if (cl[6] == this.emptySymbol) {
+            return 6;
+        } else if (cl[8] == this.emptySymbol) {
+            return 8;
+        }
+        let rand = this.getRandomInt(4);
+        if (rand == 0) {
+            return 0;
+        } else if (rand == 1) {
+            return 2;
+        } else if (rand == 2) {
+            return 6;
+        } else if (rand == 3) {
+            return 8;
+        }
+    }
+    
     ortogonalCorner(cl, game) {
         let userLabel = game.getUser().getLabel();
         if (cl[1] == userLabel) {
@@ -309,12 +331,15 @@ class Bot extends Player
                 if (cl[4] == this.emptySymbol) {
                     return 4;
                 } 
-            } else if (countStep == 2) { 
-                
+            } else if (countStep == 3) { 
+                return this.getCornerIndexForSecondStep(cl);
+            } else {
+                let bestStep = this.getBestStep(cl, game);
+                if (bestStep != -1) {
+                    return bestStep;
+                }
             }
         }
-
-
         let indexCell = this.getEmptyCell(cl);
         return indexCell;
     }

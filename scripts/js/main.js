@@ -64,17 +64,21 @@ class Game
         this.countStep++;
     }
     
-    checkCells(cells, label) {
+    cellsToList(cells) {
         let cl = [];
         for(let i = 0; i < cells.length; i++) {
             if (cells[i].childNodes.length == 1) {
                 cl.push(cells[i].childNodes[0].nodeValue);
             } else {
-                 cl.push('z');
+                 cl.push(this.getEmptySymbol());
             }
         }
+        return cl;
+    }
+    
+    checkCells(cells, label) {
+        let cl = this.cellsToList(cells);
         return this.checkList(cl, label);
-        
     }
     
     checkList(cl, label) {
@@ -210,19 +214,7 @@ class Bot extends Player
         }
         return indexCell;
     }
-    
-    cellsToList(cells, game) {
-        let cl = [];
-        for(let i = 0; i < cells.length; i++) {
-            if (cells[i].childNodes.length == 1) {
-                cl.push(cells[i].childNodes[0].nodeValue);
-            } else {
-                 cl.push(game.getEmptySymbol());
-            }
-        }
-        return cl;
-    }
-    
+
     getRandomInt(max) {
       return Math.floor(Math.random() * Math.floor(max));
     }
@@ -427,11 +419,12 @@ function afterPageLoad() {
            if (game.getUser().getLabel() == TypeLabel.O) {           
                 if (game.getGameStatus() != GameStatus.STOP) {
                     let cells = document.getElementsByClassName('cell');
-                    let cl = game.getBot().cellsToList(cells, game);
+                    let cl = game.cellsToList(cells, game);
                     let indexCell = game.getBot().getCell(cl, game);
                     let lb = game.getBot().getLabel();
                     let node = document.createTextNode(lb);
                     cells[indexCell].appendChild(node);
+                    cells[indexCell].setAttribute('checked', 'true');
                  }
                  game.checkGame();
            }
@@ -458,11 +451,12 @@ function afterPageLoad() {
                          
                     if (game.getGameStatus() != GameStatus.STOP) {
                         let cells = document.getElementsByClassName('cell');
-                        let cl = game.getBot().cellsToList(cells, game);
+                        let cl = game.cellsToList(cells, game);
                         let indexCell = game.getBot().getCell(cl, game);
                         let lb = game.getBot().getLabel();
                         let node = document.createTextNode(lb);
                         cells[indexCell].appendChild(node);
+                        cells[indexCell].setAttribute('checked', 'true');
                     }
                     game.checkGame();
                }

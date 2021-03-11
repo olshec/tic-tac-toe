@@ -195,7 +195,7 @@ class Bot extends Player
         let indexCell = -1;
         for(let i = 0; i < cl.length; i++) {
             if (cl[i] == this.emptySymbol) {
-                indexCell = i;
+               return i;
             }
         }
         return indexCell;

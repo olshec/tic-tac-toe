@@ -97,27 +97,30 @@ class Game
         }
         
         let cells = document.getElementsByClassName('cell');
-        let win = this.checkCells(cells, 'X');
+        let win = this.checkCells(cells, TypeLabel.X);
         if(win == true) {
             this.setGameStatus(GameStatus.STOP);
-            if(this.getUser().getLabel() == 'X') {
+            if(this.getUser().getLabel() == TypeLabel.X) {
                 this.printUserWin();
             } else {
                 this.printBotWin();
             }
         } else {
-            let win = this.checkCells(cells, 'O');
+            let win = this.checkCells(cells, TypeLabel.O);
             if(win == true) {
                 this.setGameStatus(GameStatus.STOP);
-                if(this.getUser().getLabel() == 'O') {
+                if(this.getUser().getLabel() == TypeLabel.O) {
                     this.printUserWin();
                 } else {
                     this.printBotWin();
                 }
-            } else if (GameStatus.STOP == this.getGameStatus()) {
+            } else if (this.getGameStatus() == GameStatus.STOP) {
                 this.printDraw();
             }
         }
+        
+
+        
     }
     
     printUserWin() {
@@ -189,10 +192,9 @@ class Bot extends Player
     emptySymbol = 'z';
     
     getEmptyCell(cl) {
-        let indexCell = 0;
+        let indexCell = -1;
         for(let i = 0; i < cl.length; i++) {
             if(cl[i] == this.emptySymbol) {
-                countEmptyCell++;
                 indexCell = i;
             }
         }
@@ -211,29 +213,31 @@ class Bot extends Player
         return cl;
     }
     
-    getCell(cells, game) {
-        let cl = this.cellsToList(cells);
+    getCell(cl, game) {
+        //let cl = this.cellsToList(cells);
         let indexCell = this.getEmptyCell(cl);
-        let countEmptyCell = 0;
+        //let countEmptyCell = 0;
         
-        if(countEmptyCell == 1) {
-            return indexCell;
+        if(indexCell == -1) {
+            return -1;
         }
         
-        for(let i = 0; i < cl.length; i++) {
-            if(cl[i] == emptySymbol) {
-                cl[i] = this.getLabel();
-                let result = game.checkList(cl, this.getLabel());
-                if(result == true) {
-                    indexCell = i;
-                    break;
-                } else {
-                    
-  
-                    indexCell = this.getCell(cl, game);
-                    break;
-                } 
+        cl[indexCell] = this.getLabel();
+        let result = game.checkList(cl, this.getLabel());
+        if(result == true) {
+            return indexCell;
+        } else {
+            let indexCellForUser = this.getEmptyCell(cl);
+            if(indexCellForUser != -1) {
+                cl[indexCellForUser] = game.getUser().getLabel();
+                let indexCellReturn = this.getCell(cl, game);
+                if(indexCellReturn == -1) {
+                    return indexCell;
+                }
+            } else {
+                return indexCell;
             }
+            
         }
         return indexCell;
     }
@@ -303,10 +307,17 @@ function afterPageLoad() {
            document.getElementsByClassName('button-O')[0].classList.add('gray-btn');
            game.setGameStatus(GameStatus.CONTINUE);
            game.setCountStep(0);
-           if(game.getUser().getLabel() == TypeLabel.X) {
-                game.setActivePlayer(game.getUser());
-           } else {
-                game.setActivePlayer(game.getBot());
+           
+           if(game.getUser().getLabel() == TypeLabel.O) {           
+                if(game.getGameStatus() != GameStatus.STOP) {
+                    let cells = document.getElementsByClassName('cell');
+                    let cl = game.getBot().cellsToList(cells);
+                    let indexCell = game.getBot().getCell(cl, game);
+                    let lb = game.getBot().getLabel();
+                    let node = document.createTextNode(lb);
+                    cells[indexCell].appendChild(node);
+                 }
+                 game.checkGame();
            }
            
         } else {
@@ -322,16 +333,21 @@ function afterPageLoad() {
         cells[i].addEventListener('click', function() {
             if(game.getGameStatus() == GameStatus.CONTINUE) {
                 if(cells[i].getAttribute('checked') == 'false') {
-                    let lb = game.getActivePlayer().getLabel();
+                    let lb = game.getUser().getLabel();
                     let node = document.createTextNode(lb);
                     this.appendChild(node);
                     this.setAttribute('checked', 'true');
-                    if((game.getActivePlayer() instanceof Human)) {
-                        game.setActivePlayer(game.getBot())
-                    } else {
-                        game.setActivePlayer(game.getUser())
-                    }
                 }
+                 game.checkGame();
+                 
+                 if(game.getGameStatus() != GameStatus.STOP) {
+                    let cells = document.getElementsByClassName('cell');
+                    let cl = game.getBot().cellsToList(cells);
+                    let indexCell = game.getBot().getCell(cl, game);
+                    let lb = game.getBot().getLabel();
+                    let node = document.createTextNode(lb);
+                    cells[indexCell].appendChild(node);
+                 }
                  game.checkGame();
             }
         });

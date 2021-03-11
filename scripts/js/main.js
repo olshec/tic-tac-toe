@@ -1,8 +1,8 @@
 
-var user;
-var bot;
-var gameStatus;
-var activePlayer;
+let user;
+let bot;
+let gameStatus;
+let activePlayer;
 
 class GameStatus 
 {

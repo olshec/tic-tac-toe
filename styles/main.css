@@ -31,6 +31,10 @@ body {
     text-align: center;
 }
 
+.button:hover {
+	cursor: pointer;
+}
+
 .button-X {
     top: 2em; left: 40em;
 }

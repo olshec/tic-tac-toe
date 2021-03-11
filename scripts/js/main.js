@@ -1,31 +1,138 @@
 
-let countStep;
-//let game;
-let user;
-let bot;
-let gameStatus;
-let activePlayer;
+let game;
+
+
+
 
 
 class Game 
 {
     countStep;
+    gameStatus;
+    user;
+    bot;
+    activePlayer;
     
     constructor() {
         this.setCountStep(0);
+        this.setGameStatus(GameStatus.NEW);
     }
     
     setCountStep(countStep) {
         this.countStep = countStep;
     }
     
+    setGameStatus(gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+    
+    setUser(user) {
+        this.user = user;
+    }
+    
+    setBot(bot) {
+        this.bot = bot;
+    }
+    
+    setActivePlayer(activePlayer) {
+        this.activePlayer = activePlayer;
+    }
+    
     getCountStep() {
         return this.countStep;
+    }
+    
+    getGameStatus() {
+        return this.gameStatus;
+    }
+    
+    getUser() {
+        return this.user;
+    }
+    
+    getBot() {
+        return this.bot;
+    }
+    
+    getActivePlayer() {
+        return this.activePlayer;
     }
     
     addCountStep() {
         this.countStep++;
     }
+    
+    checkCells(cells, label) {
+        let cl = [];
+        for(let i = 0; i < cells.length; i++) {
+            if(cells[i].childNodes.length == 1) {
+                cl.push(cells[i].childNodes[0].nodeValue);
+            } else {
+                 cl.push('z');
+            }
+        }
+        
+        if(cl[0] == label && cl[1] == label && cl[2] == label ||
+           cl[3] == label && cl[4] == label && cl[5] == label ||
+           cl[6] == label && cl[7] == label && cl[8] == label ||
+           cl[0] == label && cl[3] == label && cl[6] == label ||
+           cl[1] == label && cl[4] == label && cl[7] == label ||
+           cl[2] == label && cl[5] == label && cl[8] == label ||
+           cl[0] == label && cl[4] == label && cl[8] == label ||
+           cl[2] == label && cl[4] == label && cl[6] == label   ){
+            return true;
+        }
+        return false;
+    }
+    
+    checkGame() {
+        this.addCountStep();
+        
+        if(this.getCountStep() == 9) {
+            this.setGameStatus(GameStatus.STOP);
+        }
+        
+        let cells = document.getElementsByClassName('cell');
+        let win = this.checkCells(cells, 'X');
+        if(win == true) {
+            this.setGameStatus(GameStatus.STOP);
+            if(this.getUser().getLabel() == 'X') {
+                this.printUserWin();
+            } else {
+                this.printBotWin();
+            }
+        } else {
+            let win = this.checkCells(cells, 'O');
+            if(win == true) {
+                this.setGameStatus(GameStatus.STOP);
+                if(this.getUser().getLabel() == 'O') {
+                    this.printUserWin();
+                } else {
+                    this.printBotWin();
+                }
+            } else if (GameStatus.STOP == this.getGameStatus()) {
+                this.printDraw();
+            }
+        }
+    }
+    
+    printUserWin() {
+        let messageResult = document.getElementsByClassName('message')[0];
+        messageResult.hidden = false;
+    }
+
+    printBotWin() {
+        let messageResult = document.getElementsByClassName('message')[0];
+        messageResult.childNodes[0].nodeValue = 'You lose!';
+        messageResult.hidden = false;
+    }
+
+    printDraw() {
+        let messageResult = document.getElementsByClassName('message')[0];
+        messageResult.childNodes[0].nodeValue = 'The draw!';
+        messageResult.hidden = false;
+    }
+
 }
 
 class GameStatus 
@@ -77,81 +184,16 @@ class Bot extends Player
     
 }
 
-function printUserWin() {
-    let messageResult = document.getElementsByClassName('message')[0];
-    messageResult.hidden = false;
-}
 
-function printBotWin() {
-    let messageResult = document.getElementsByClassName('message')[0];
-    messageResult.childNodes[0].nodeValue = 'You lose!';
-    messageResult.hidden = false;
-}
 
-function printDraw() {
-    let messageResult = document.getElementsByClassName('message')[0];
-    messageResult.childNodes[0].nodeValue = 'The draw!';
-    messageResult.hidden = false;
-}
 
-function checkCells(cells, label) {
-    let cl = [];
-    for(let i = 0; i < cells.length; i++) {
-        if(cells[i].childNodes.length == 1) {
-            cl.push(cells[i].childNodes[0].nodeValue);
-        } else {
-             cl.push('z');
-        }
-    }
     
-    if(cl[0] == label && cl[1] == label && cl[2] == label ||
-       cl[3] == label && cl[4] == label && cl[5] == label ||
-       cl[6] == label && cl[7] == label && cl[8] == label ||
-       cl[0] == label && cl[3] == label && cl[6] == label ||
-       cl[1] == label && cl[4] == label && cl[7] == label ||
-       cl[2] == label && cl[5] == label && cl[8] == label ||
-       cl[0] == label && cl[4] == label && cl[8] == label ||
-       cl[2] == label && cl[4] == label && cl[6] == label   ){
-        return true;
-    }
-    return false;
-}
-    
-function checkGame() {
-    countStep++;
-    
-    if(countStep == 9) {
-        gameStatus = GameStatus.STOP;
-    }
-    
-    let cells = document.getElementsByClassName('cell');
-    let win = this.checkCells(cells, 'X');
-    if(win == true) {
-        gameStatus = GameStatus.STOP;
-        if(user.getLabel() == 'X') {
-            printUserWin();
-        } else {
-            printBotWin();
-        }
-    } else {
-        let win = this.checkCells(cells, 'O');
-        if(win == true) {
-            gameStatus = GameStatus.STOP;
-            if(user.getLabel() == 'O') {
-                printUserWin();
-            } else {
-                printBotWin();
-            }
-        } else if (GameStatus.STOP ==  gameStatus) {
-            printDraw();
-        }
-    }
-}
+
 
 
 function afterPageLoad() {
+    game = new Game();
     
-    gameStatus = GameStatus.NEW;
     
     let buttonX = document.getElementsByClassName('button-X')[0];
     buttonX.addEventListener('click', function() {
@@ -173,14 +215,14 @@ function afterPageLoad() {
     
     let buttonStart = document.getElementsByClassName('button-start')[0];
     buttonStart.addEventListener('click', function(){
-        if(gameStatus == GameStatus.NEW) {
+        if(game.getGameStatus() == GameStatus.NEW) {
             let buttonX = document.getElementsByClassName('button-X')[0];
             if(buttonX.classList.contains('select-btn') == true) {
-                user = new Human(TypeLabel.X);
-                bot = new Bot(TypeLabel.O);
+                game.setUser(new Human(TypeLabel.X));
+                game.setBot(new Bot(TypeLabel.O));
             } else {
-                user = new Human(TypeLabel.O);
-                bot = new Bot(TypeLabel.X);
+                game.setUser(new Human(TypeLabel.O));
+                game.setBot(new Bot(TypeLabel.X));
             }
             
            this.style.background = 'rgb(110, 110, 110)';
@@ -188,9 +230,9 @@ function afterPageLoad() {
             'rgb(110, 110, 110)';
            document.getElementsByClassName('button-O')[0].style.background = 
             'rgb(110, 110, 110)';
-           gameStatus = GameStatus.CONTINUE;
-           countStep = 0;
-           activePlayer = user;
+           game.setGameStatus(GameStatus.CONTINUE);
+           game.setCountStep(0);
+           game.setActivePlayer(game.getUser());
         }
 
     });
@@ -199,19 +241,19 @@ function afterPageLoad() {
     for(let i = 0; i < cells.length; i++) {
         cells[i].setAttribute('checked', 'false');
         cells[i].addEventListener('click', function() {
-            if(GameStatus.CONTINUE == gameStatus) {
+            if(game.getGameStatus() == GameStatus.CONTINUE) {
                 if(cells[i].getAttribute('checked') == 'false') {
-                    let lb = activePlayer.getLabel();
+                    let lb = game.getActivePlayer().getLabel();
                     let node = document.createTextNode(lb);
                     this.appendChild(node);
                     this.setAttribute('checked', 'true');
-                    if((activePlayer instanceof Human)) {
-                        activePlayer = bot;
+                    if((game.getActivePlayer() instanceof Human)) {
+                        game.setActivePlayer(game.getBot())
                     } else {
-                        activePlayer = user;
+                        game.setActivePlayer(game.getUser())
                     }
                 }
-                checkGame();
+                 game.checkGame();
             }
         });
     }

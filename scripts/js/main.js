@@ -1,13 +1,7 @@
-
 let game;
-
-
-
-
 
 class Game 
 {
-   
     countStep;
     gameStatus;
     user;
@@ -97,7 +91,6 @@ class Game
     
     checkGame() {
         this.addCountStep();
-        
         if (this.getCountStep() == 9) {
             this.setGameStatus(GameStatus.STOP);
         }
@@ -123,10 +116,7 @@ class Game
             } else if (this.getGameStatus() == GameStatus.STOP) {
                 this.printDraw();
             }
-        }
-        
-
-        
+        }    
     }
     
     printUserWin() {
@@ -432,8 +422,6 @@ function afterPageLoad() {
         } else {
             startNewGame();
         }
-        
-
     });
     
     let cells = document.getElementsByClassName('cell');

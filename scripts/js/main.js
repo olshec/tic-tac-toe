@@ -118,6 +118,7 @@ class Game
     
     printUserWin() {
         let messageResult = document.getElementsByClassName('message')[0];
+        messageResult.childNodes[0].nodeValue = 'You win!';
         messageResult.hidden = false;
     }
 
@@ -187,7 +188,22 @@ class Bot extends Player
 
 
 
+function startNewGame() {
+    game = new Game();
+    game.setGameStatus(GameStatus.NEW);
     
+    let cells = document.getElementsByClassName('cell');
+    for(let i = 0; i < cells.length; i++) {
+        cells[i].setAttribute('checked', 'false');
+        if(cells[i].childNodes.length == 1) {
+            cells[i].childNodes[0].remove();
+        }
+    }
+    document.getElementsByClassName('button-start')[0].classList.remove('red-btn');
+    document.getElementsByClassName('button-X')[0].classList.remove('gray-btn');
+    document.getElementsByClassName('button-O')[0].classList.remove('gray-btn');
+    document.getElementsByClassName('message')[0].hidden = true;
+}    
 
 
 
@@ -216,6 +232,9 @@ function afterPageLoad() {
     let buttonStart = document.getElementsByClassName('button-start')[0];
     buttonStart.addEventListener('click', function(){
         if(game.getGameStatus() == GameStatus.NEW) {
+            
+            this.childNodes[0].nodeValue = 'Start new game';
+            
             let buttonX = document.getElementsByClassName('button-X')[0];
             if(buttonX.classList.contains('select-btn') == true) {
                 game.setUser(new Human(TypeLabel.X));
@@ -225,15 +244,21 @@ function afterPageLoad() {
                 game.setBot(new Bot(TypeLabel.X));
             }
             
-           this.style.background = 'rgb(110, 110, 110)';
-           document.getElementsByClassName('button-X')[0].style.background = 
-            'rgb(110, 110, 110)';
-           document.getElementsByClassName('button-O')[0].style.background = 
-            'rgb(110, 110, 110)';
+           this.classList.add('red-btn');
+           document.getElementsByClassName('button-X')[0].classList.add('gray-btn');
+           document.getElementsByClassName('button-O')[0].classList.add('gray-btn');
            game.setGameStatus(GameStatus.CONTINUE);
            game.setCountStep(0);
-           game.setActivePlayer(game.getUser());
+           if(game.getUser().getLabel() == TypeLabel.X) {
+                game.setActivePlayer(game.getUser());
+           } else {
+                game.setActivePlayer(game.getBot());
+           }
+           
+        } else {
+            startNewGame();
         }
+        
 
     });
     

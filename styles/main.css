@@ -69,6 +69,14 @@ body {
     text-align: center;
 }
 
+.gray-btn {
+    background: rgb(110, 110, 110);
+}
+
+.red-btn {
+    background: rgb(239, 41, 41);
+}
+
 [hidden] { display: none; }
 
 

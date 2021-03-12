@@ -355,6 +355,8 @@ function startNewGame() {
             cells[i].childNodes[0].remove();
         }
     }
+    
+    document.getElementsByClassName('button-start')[0].childNodes[0].nodeValue = 'Start';
     document.getElementsByClassName('button-start')[0].classList.remove('red-btn');
     document.getElementsByClassName('button-X')[0].classList.remove('gray-btn');
     document.getElementsByClassName('button-O')[0].classList.remove('gray-btn');

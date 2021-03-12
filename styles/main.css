@@ -79,8 +79,67 @@ body {
     cursor: pointer;
 }
 
+@media (min-width: 320px) { 
+	.cell {
+	    width: 4em;
+	    height: 4em;
+	    line-height: 4em;
+	}
+	
+	.button {
+	   width: 4em;
+	}
+	
+	.button-X {
+	    top: 2em; left: 20em;
+	}
+	
+	.button-O {
+	    top: 2em; left: 26em;
+	}
+	
+	.button-start {
+	    width: 10em;
+	    top: 6em; left: 20em;
+	}
+	
+	.message {
+	    width: 10em;
+	    top: 10em; left: 20em;
+    }
+}
 
 
+ @media (min-width: 768px) { 
+    .cell {
+        width: 10em;
+        height: 10em;
+        line-height: 10em;
+    }
+    
+    .button {
+       width: 8em;
+    }
+    
+    .button-X {
+        top: 2em; left: 40em;
+    }
+    
+    .button-O {
+        top: 2em; left: 50em;
+    }
+    
+    .button-start {
+        width: 18em;
+        top: 6em; left: 40em;
+    }
+    
+    .message {
+        width: 18em;
+        top: 10em; left: 40em;
+    }
+    
+}  
 
 
 
